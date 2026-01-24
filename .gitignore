@@ -13,6 +13,3 @@ node_modules/
 build/
 # Собранные файлы (допишите самостоятельно)
 
-
-*.bundle.js
-*.bundle.js.map
