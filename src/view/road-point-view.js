@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 
-export default class RoadPoint {
+export default class RoadPointView {
   constructor(point) {
     this.point = point;
     this.element = null;

@@ -1,28 +1,54 @@
 import { render, RenderPosition } from './render.js';
+import TripInfoView from './view/trip-info-view.js';
 import FiltersView from './view/filters-view.js';
 import SortingView from './view/sorting-view.js';
-import RoadPoint from './view/road-point.js';
-import EditForm from './view/edit-form.js';
-
+import EventsListView from './view/events-list-view.js';
+import RoadPointView from './view/road-point-view.js';
+import EditFormView from './view/edit-form-view.js';
+import CreateFormView from './view/create-form-view.js';
 export default class Presenter {
   constructor() {
+    this.tripInfoContainer = document.querySelector('.trip-main');
     this.filtersContainer = document.querySelector('.trip-controls__filters');
     this.sortingContainer = document.querySelector('.trip-events');
-    this.eventsListContainer = document.querySelector('.trip-events__list');
+    this.eventsListContainer = null;
   }
 
   init() {
+    const tripInfoData = {
+      title: 'Amsterdam &mdash; Chamonix &mdash; Geneva',
+      dates: '18&nbsp;&mdash;&nbsp;20 Mar',
+      cost: '1230',
+    };
+    const tripInfoComponent = new TripInfoView(tripInfoData);
+    render(tripInfoComponent, this.tripInfoContainer, RenderPosition.AFTERBEGIN);
+
     const filtersComponent = new FiltersView();
     render(filtersComponent, this.filtersContainer);
 
     const sortingComponent = new SortingView();
     render(sortingComponent, this.sortingContainer, RenderPosition.AFTERBEGIN);
 
-    if (!this.eventsListContainer) {
-      this.eventsListContainer = document.createElement('ul');
-      this.eventsListContainer.className = 'trip-events__list';
-      this.sortingContainer.appendChild(this.eventsListContainer);
-    }
+    const eventsListComponent = new EventsListView();
+    render(eventsListComponent, this.sortingContainer);
+    this.eventsListContainer = eventsListComponent.getListElement();
+
+    const createFormData = {
+      type: 'flight',
+      startTime: '',
+      endTime: '',
+      price: '',
+      destination: '',
+      offers: [
+        { id: 'luggage', title: 'Add luggage', price: 30, selected: false },
+        { id: 'comfort', title: 'Switch to comfort class', price: 100, selected: false },
+        { id: 'meal', title: 'Add meal', price: 15, selected: false },
+        { id: 'seats', title: 'Choose seats', price: 5, selected: false },
+        { id: 'train', title: 'Travel by train', price: 40, selected: false },
+      ],
+    };
+    const createFormComponent = new CreateFormView(createFormData);
+    render(createFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
 
     const editFormData = {
       type: 'flight',
@@ -39,7 +65,7 @@ export default class Presenter {
         { id: 'train', title: 'Travel by train', price: 40, selected: false },
       ],
     };
-    const editFormComponent = new EditForm(editFormData);
+    const editFormComponent = new EditFormView(editFormData);
     render(editFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
 
     const roadPointsData = [
@@ -82,7 +108,7 @@ export default class Presenter {
       },
     ];
     roadPointsData.forEach((pointData) => {
-      const roadPointComponent = new RoadPoint(pointData);
+      const roadPointComponent = new RoadPointView(pointData);
       render(roadPointComponent, this.eventsListContainer);
     });
   }

@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 
-export default class EditForm {
+export default class EditFormView {
   constructor(point) {
     this.point = point;
     this.element = null;
@@ -24,7 +24,7 @@ export default class EditForm {
       <form class="trip-events__item  event  event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
-            <label class="event__type  event__type--toggle  visually-hidden" for="event-type-toggle-1">
+            <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
               <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
             </label>
