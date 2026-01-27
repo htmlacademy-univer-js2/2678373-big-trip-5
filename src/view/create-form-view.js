@@ -1,10 +1,49 @@
 import FormView from './form-view.js';
+import { getOffersByType } from '../model/mock-data.js';
 
 export default class CreateFormView extends FormView {
+  constructor(point, destination, offers) {
+    super(point);
+    this.destination = destination;
+    this.allOffers = offers;
+  }
+
   getTemplate() {
-    const { type = 'flight', startTime = '', endTime = '', price = '', destination = '', offers = [] } = this.point;
-    const offersTemplate = this.getOffersTemplate(offers);
+    const { type = 'flight', startTime = '', endTime = '', basePrice = '' } = this.point;
+    const destinationData = this.destination || {};
+
+    const typeOffers = getOffersByType(type) || {};
+    const offersForForm = Object.values(typeOffers).map((offer) => ({
+      id: offer.id,
+      title: offer.title,
+      price: offer.price,
+      selected: false,
+    }));
+
+    const offersTemplate = this.getOffersTemplate(offersForForm);
     const eventTypesTemplate = this.getEventTypesTemplate(type);
+    const destinationName = destinationData.name || '';
+
+    const offersSection = offersForForm.length > 0 ? `
+      <section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+          ${offersTemplate}
+        </div>
+      </section>
+    ` : '';
+
+    const destinationSection = destinationData.name ? `
+      <section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${destinationData.description || ''}</p>
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${(destinationData.photos || []).map((photo) => `<img class="event__photo" src="${photo}" alt="Event photo">`).join('')}
+          </div>
+        </div>
+      </section>
+    ` : '';
 
     return `<li class="trip-events__item">
       <form class="trip-events__item  event  event--edit" action="#" method="post">
@@ -28,11 +67,12 @@ export default class CreateFormView extends FormView {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type.charAt(0).toUpperCase() + type.slice(1)}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" placeholder="Enter destination" value="${destination}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" placeholder="Enter destination" value="${destinationName}" list="destination-list-1">
             <datalist id="destination-list-1">
               <option value="Amsterdam"></option>
-              <option value="Geneva"></option>
               <option value="Chamonix"></option>
+              <option value="Geneva"></option>
+              <option value="Paris"></option>
             </datalist>
           </div>
 
@@ -49,35 +89,15 @@ export default class CreateFormView extends FormView {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" placeholder="0" value="${price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" placeholder="0" value="${basePrice}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          <section class="event__section  event__section--offers">
-            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-            <div class="event__available-offers">
-              ${offersTemplate}
-            </div>
-          </section>
-
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
-
-            <div class="event__photos-container">
-              <div class="event__photos-tape">
-                <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-                <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-                <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-                <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-                <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
-              </div>
-            </div>
-          </section>
+          ${offersSection}
+          ${destinationSection}
         </section>
       </form>
     </li>`;

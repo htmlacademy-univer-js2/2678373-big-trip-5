@@ -1,22 +1,32 @@
 import { createElement } from '../render.js';
 
 export default class RoadPointView {
-  constructor(point) {
+  constructor(point, destination, offers) {
     this.point = point;
+    this.destination = destination;
+    this.offers = offers;
     this.element = null;
   }
 
   getTemplate() {
-    const { type, title, startTime, endTime, duration, price, offers, isFavorite } = this.point;
+    const { type, startTime, endTime, basePrice, selectedOffers, isFavorite } = this.point;
+    const destinationName = this.destination ? this.destination.name : '';
 
-    const offersTemplate = offers.map((offer) => `
+    const offersTemplate = selectedOffers.map((offerId) => {
+      const offer = this.offers[offerId];
+      if (!offer) {
+        return '';
+      }
+      return `
       <li class="event__offer">
         <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.price}</span>
       </li>
-    `).join('');
+    `;
+    }).join('');
 
+    const duration = this.point.getDuration();
     const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
 
     return `<li class="trip-events__item">
@@ -25,7 +35,7 @@ export default class RoadPointView {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type.charAt(0).toUpperCase() + type.slice(1)} ${title}</h3>
+        <h3 class="event__title">${type.charAt(0).toUpperCase() + type.slice(1)} ${destinationName}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${new Date(startTime).toISOString()}">${new Date(startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
@@ -35,7 +45,7 @@ export default class RoadPointView {
           <p class="event__duration">${duration}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${price}</span>
+          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">

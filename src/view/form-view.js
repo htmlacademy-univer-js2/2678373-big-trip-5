@@ -29,6 +29,16 @@ export default class FormView {
     `).join('');
   }
 
+  buildOffersForForm(selectedOfferIds = []) {
+    const allOffers = this.allOffers || {};
+    return Object.values(allOffers).map((offer) => ({
+      id: offer.id,
+      title: offer.title,
+      price: offer.price,
+      selected: selectedOfferIds.includes(offer.id),
+    }));
+  }
+
   getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
