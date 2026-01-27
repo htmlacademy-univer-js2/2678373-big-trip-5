@@ -33,17 +33,19 @@ export default class CreateFormView extends FormView {
       </section>
     ` : '';
 
-    const destinationSection = destinationData.name ? `
+    const destinationSection = `
       <section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${destinationData.description || ''}</p>
+        ${destinationData.description ? `<p class="event__destination-description">${destinationData.description}</p>` : ''}
+        ${(destinationData.photos || []).length > 0 ? `
         <div class="event__photos-container">
           <div class="event__photos-tape">
-            ${(destinationData.photos || []).map((photo) => `<img class="event__photo" src="${photo}" alt="Event photo">`).join('')}
+            ${destinationData.photos.map((photo) => `<img class="event__photo" src="${photo}" alt="Event photo">`).join('')}
           </div>
         </div>
+        ` : ''}
       </section>
-    ` : '';
+    `;
 
     return `<li class="trip-events__item">
       <form class="trip-events__item  event  event--edit" action="#" method="post">

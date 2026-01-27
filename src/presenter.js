@@ -39,7 +39,7 @@ export default class Presenter {
     const genevaDest = this.model.getDestinationById('geneva');
     const createFormComponent = new CreateFormView(
       { type: 'flight', startTime: '', endTime: '', basePrice: 0 },
-      null,
+      genevaDest,
       this.model.getOffers()
     );
     render(createFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
