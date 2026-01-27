@@ -1,5 +1,4 @@
 import { render, RenderPosition } from './render.js';
-import Model from './model/model.js';
 import TripInfoView from './view/trip-info-view.js';
 import FiltersView from './view/filters-view.js';
 import SortingView from './view/sorting-view.js';
@@ -9,12 +8,12 @@ import EditFormView from './view/edit-form-view.js';
 import CreateFormView from './view/create-form-view.js';
 
 export default class Presenter {
-  constructor() {
+  constructor(model) {
     this.tripInfoContainer = document.querySelector('.trip-main');
     this.filtersContainer = document.querySelector('.trip-controls__filters');
     this.sortingContainer = document.querySelector('.trip-events');
     this.eventsListContainer = null;
-    this.model = new Model();
+    this.model = model;
   }
 
   init() {

@@ -1,5 +1,5 @@
 export default class Destination {
-  constructor(id, name, description, photos) {
+  constructor({ id, name, description, photos }) {
     this.id = id;
     this.name = name;
     this.description = description;

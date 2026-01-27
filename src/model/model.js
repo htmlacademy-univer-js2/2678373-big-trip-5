@@ -23,10 +23,6 @@ export default class Model {
     return this.destinations[id];
   }
 
-  getOfferById(id) {
-    return this.offers[id];
-  }
-
   getOffersByType(type) {
     return getOffersByType(type);
   }

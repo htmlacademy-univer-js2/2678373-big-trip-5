@@ -3,47 +3,51 @@ import Offer from './offer.js';
 import Point from './point.js';
 
 const DESTINATIONS = {
-  'amsterdam': new Destination(
-    'amsterdam',
-    'Amsterdam',
-    'Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
-    [
+  'amsterdam': new Destination({
+    id: 'amsterdam',
+    name: 'Amsterdam',
+    description:
+      'Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra.',
+    photos: [
       'https://loremflickr.com/248/152?random=1',
       'https://loremflickr.com/248/152?random=2',
       'https://loremflickr.com/248/152?random=3',
-    ]
-  ),
-  'chamonix': new Destination(
-    'chamonix',
-    'Chamonix',
-    'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
-    [
+    ],
+  }),
+  'chamonix': new Destination({
+    id: 'chamonix',
+    name: 'Chamonix',
+    description:
+      'Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum.',
+    photos: [
       'https://loremflickr.com/248/152?random=4',
       'https://loremflickr.com/248/152?random=5',
-    ]
-  ),
-  'geneva': new Destination(
-    'geneva',
-    'Geneva',
-    'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
-    [
+    ],
+  }),
+  'geneva': new Destination({
+    id: 'geneva',
+    name: 'Geneva',
+    description:
+      'Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis.',
+    photos: [
       'https://loremflickr.com/248/152?random=6',
       'https://loremflickr.com/248/152?random=7',
       'https://loremflickr.com/248/152?random=8',
       'https://loremflickr.com/248/152?random=9',
       'https://loremflickr.com/248/152?random=10',
-    ]
-  ),
-  'paris': new Destination(
-    'paris',
-    'Paris',
-    'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.',
-    [
+    ],
+  }),
+  'paris': new Destination({
+    id: 'paris',
+    name: 'Paris',
+    description:
+      'Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.',
+    photos: [
       'https://loremflickr.com/248/152?random=11',
       'https://loremflickr.com/248/152?random=12',
       'https://loremflickr.com/248/152?random=13',
-    ]
-  ),
+    ],
+  }),
 };
 
 // Offers by type
