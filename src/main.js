@@ -1,4 +1,6 @@
 import Presenter from './presenter.js';
+import Model from './model/model.js';
 
-const presenter = new Presenter();
+const model = new Model();
+const presenter = new Presenter(model);
 presenter.init();
