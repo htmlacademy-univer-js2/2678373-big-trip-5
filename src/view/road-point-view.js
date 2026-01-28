@@ -1,7 +1,9 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 import { getDuration } from '../utils/defineTimeDuration.js';
-export default class RoadPointView {
+export default class RoadPointView extends AbstractView {
   constructor(point, destination, offers) {
+    super();
     this.point = point;
     this.destination = destination;
     this.offers = offers;

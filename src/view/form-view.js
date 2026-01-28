@@ -1,7 +1,9 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 
-export default class FormView {
+export default class FormView extends AbstractView {
   constructor(point = {}) {
+    super();
     this.point = point;
     this.element = null;
   }

@@ -1,7 +1,9 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 
-export default class TripInfoView {
+export default class TripInfoView extends AbstractView {
   constructor(tripData = {}) {
+    super();
     this.tripData = tripData;
     this.element = null;
   }

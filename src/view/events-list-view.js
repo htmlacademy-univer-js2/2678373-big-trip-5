@@ -1,7 +1,9 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 
-export default class EventsListView {
+export default class EventsListView extends AbstractView {
   constructor() {
+    super();
     this.element = null;
   }
 

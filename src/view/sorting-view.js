@@ -1,6 +1,7 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 
-export default class SortingView {
+export default class SortingView extends AbstractView {
   constructor(sorts = [
     { id: 'day', label: 'Day', checked: true, disabled: false },
     { id: 'event', label: 'Event', checked: false, disabled: true },
@@ -8,6 +9,7 @@ export default class SortingView {
     { id: 'price', label: 'Price', checked: false, disabled: false },
     { id: 'offer', label: 'Offers', checked: false, disabled: true },
   ]) {
+    super();
     this.sorts = sorts;
     this.element = null;
   }

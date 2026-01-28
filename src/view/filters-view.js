@@ -1,12 +1,14 @@
+import AbstractView from '../framework/view/abstract-view.js';
 import { createElement } from '../render.js';
 
-export default class FiltersView {
+export default class FiltersView extends AbstractView {
   constructor(filters = [
     { id: 'everything', label: 'Everything', checked: true },
     { id: 'future', label: 'Future', checked: false },
     { id: 'present', label: 'Present', checked: false },
     { id: 'past', label: 'Past', checked: false },
   ]) {
+    super();
     this.filters = filters;
     this.element = null;
   }
