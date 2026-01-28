@@ -1,5 +1,5 @@
 import { createElement } from '../render.js';
-
+import { getDuration } from '../utils/defineTimeDuration.js';
 export default class RoadPointView {
   constructor(point, destination, offers) {
     this.point = point;
@@ -9,10 +9,10 @@ export default class RoadPointView {
   }
 
   getTemplate() {
-    const { type, startTime, endTime, basePrice, selectedOffers, isFavorite } = this.point;
+    const { type, dateFrom, dateTo, price, offers, isFavorite } = this.point;
     const destinationName = this.destination ? this.destination.name : '';
 
-    const offersTemplate = selectedOffers.map((offerId) => {
+    const offersTemplate = offers.map((offerId) => {
       const offer = this.offers[offerId];
       if (!offer) {
         return '';
@@ -26,26 +26,26 @@ export default class RoadPointView {
     `;
     }).join('');
 
-    const duration = this.point.getDuration();
+    const duration = getDuration(this.point);
     const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
 
     return `<li class="trip-events__item">
       <div class="event">
-        <time class="event__date" datetime="${new Date(startTime).toISOString().split('T')[0]}">${new Date(startTime).toLocaleDateString('en-US', { month: 'short', day: '2-digit' }).toUpperCase()}</time>
+        <time class="event__date" datetime="${new Date(dateFrom).toISOString().split('T')[0]}">${new Date(dateFrom).toLocaleDateString('en-US', { month: 'short', day: '2-digit' }).toUpperCase()}</time>
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${type.charAt(0).toUpperCase() + type.slice(1)} ${destinationName}</h3>
         <div class="event__schedule">
           <p class="event__time">
-            <time class="event__start-time" datetime="${new Date(startTime).toISOString()}">${new Date(startTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
+            <time class="event__start-time" datetime="${new Date(dateFrom).toISOString()}">${new Date(dateFrom).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
             &mdash;
-            <time class="event__end-time" datetime="${new Date(endTime).toISOString()}">${new Date(endTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
+            <time class="event__end-time" datetime="${new Date(dateTo).toISOString()}">${new Date(dateTo).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</time>
           </p>
           <p class="event__duration">${duration}</p>
         </div>
         <p class="event__price">
-          &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
+          &euro;&nbsp;<span class="event__price-value">${price}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">

@@ -1,9 +1,8 @@
-import Destination from './destination.js';
-import Offer from './offer.js';
-import Point from './point.js';
+
+import { generateId } from '../utils/generateUUID.js';
 
 const DESTINATIONS = {
-  'amsterdam': new Destination({
+  'amsterdam': {
     id: 'amsterdam',
     name: 'Amsterdam',
     description:
@@ -13,8 +12,8 @@ const DESTINATIONS = {
       'https://loremflickr.com/248/152?random=2',
       'https://loremflickr.com/248/152?random=3',
     ],
-  }),
-  'chamonix': new Destination({
+  },
+  'chamonix': {
     id: 'chamonix',
     name: 'Chamonix',
     description:
@@ -23,8 +22,8 @@ const DESTINATIONS = {
       'https://loremflickr.com/248/152?random=4',
       'https://loremflickr.com/248/152?random=5',
     ],
-  }),
-  'geneva': new Destination({
+  },
+  'geneva': {
     id: 'geneva',
     name: 'Geneva',
     description:
@@ -36,8 +35,8 @@ const DESTINATIONS = {
       'https://loremflickr.com/248/152?random=9',
       'https://loremflickr.com/248/152?random=10',
     ],
-  }),
-  'paris': new Destination({
+  },
+  'paris': {
     id: 'paris',
     name: 'Paris',
     description:
@@ -47,123 +46,89 @@ const DESTINATIONS = {
       'https://loremflickr.com/248/152?random=12',
       'https://loremflickr.com/248/152?random=13',
     ],
-  }),
+  },
 };
 
-// Offers by type
 const OFFERS_BY_TYPE = {
   'taxi': {
-    'luggage-taxi': new Offer('luggage-taxi', 'Order Uber', 20),
+    'luggage-taxi': {id: 'luggage-taxi', title: 'Order Uber', price: 20 },
   },
   'bus': {
-    'wifi-bus': new Offer('wifi-bus', 'Add WiFi', 5),
-    'luggage-bus': new Offer('luggage-bus', 'Add luggage', 50),
+    'wifi-bus': {id: 'wifi-bus', title: 'Add WiFi', price: 5},
+    'luggage-bus': {id: 'luggage-bus', title: 'Add luggage', price: 50},
   },
   'train': {
-    'seat-selection': new Offer('seat-selection', 'Choose seats', 5),
-    'meal': new Offer('meal', 'Add meal', 15),
+    'seat-selection': {id: 'seat-selection', title: 'Choose seats', price: 5},
+    'meal': {id:'meal', title: 'Add meal', price: 15 },
   },
   'ship': {
-    'cabin': new Offer('cabin', 'Add cabin', 80),
-    'meal-ship': new Offer('meal-ship', 'Add meal', 15),
+    'cabin': {id:'cabin', title: 'Add cabin', price: 80 },
+    'meal-ship': {id:'meal-ship', title: 'Add meal', price:15 },
   },
   'drive': {
-    'rent-car': new Offer('rent-car', 'Rent a car', 200),
-    'wifi-drive': new Offer('wifi-drive', 'Add WiFi', 5),
+    'rent-car': {id: 'rent-car', title: 'Rent a car', price: 200},
+    'wifi-drive': {id: 'wifi-drive', title: 'Add WiFi', price: 5},
   },
   'flight': {
-    'luggage': new Offer('luggage', 'Add luggage', 30),
-    'comfort': new Offer('comfort', 'Switch to comfort class', 100),
-    'meal-flight': new Offer('meal-flight', 'Add meal', 15),
-    'seats': new Offer('seats', 'Choose seats', 5),
-    'train-upgrade': new Offer('train-upgrade', 'Travel by train', 40),
+    'luggage': { id: 'luggage', title: 'Add luggage', price: 30 } ,
+    'comfort': {id: 'comfort', title: 'Switch to comfort class', price: 100},
+    'meal-flight': {id: 'meal-flight', title: 'Add meal', price: 15},
+    'seats': {id :'seats', title: 'Choose seats', price: 5},
+    'train-upgrade': {id: 'train-upgrade', title: 'Travel by train', price: 40},
   },
   'check-in': {
-    'upgrade-room': new Offer('upgrade-room', 'Upgrade room', 150),
-    'breakfast': new Offer('breakfast', 'Add breakfast', 20),
+    'upgrade-room': {id: 'upgrade-room', title: 'Upgrade room', price: 150},
+    'breakfast': {id: 'breakfast', title: 'Add breakfast', price: 20},
   },
   'sightseeing': {
-    'guide': new Offer('guide', 'Book a guide', 60),
-    'tour': new Offer('tour', 'Add extra tour', 40),
+    'guide': { id: 'guide', title: 'Book a guide', price: 60 },
+    'tour': { id: 'tour', title: 'Add extra tour', price: 40 } ,
   },
   'restaurant': {
-    'wine': new Offer('wine', 'Add wine', 25),
-    'dessert': new Offer('dessert', 'Add dessert', 10),
+    'wine': { id: 'wine', title: 'Add wine', price: 25 },
+    'dessert': { id: 'dessert', title: 'Add dessert', price:10 },
   },
 };
 
-export function getDestinations() {
-  return DESTINATIONS;
-}
-
-export function getOffersByType(type) {
-  return OFFERS_BY_TYPE[type] || {};
-}
-
-export function generateMockPoints() {
-  return [
-    new Point(
-      'taxi',
-      'amsterdam',
-      new Date('2019-03-18T10:30'),
-      new Date('2019-03-18T11:00'),
-      20,
-      ['luggage-taxi'],
-      true
-    ),
-    new Point(
-      'flight',
-      'chamonix',
-      new Date('2019-03-18T12:25'),
-      new Date('2019-03-18T13:35'),
-      160,
-      ['luggage', 'comfort'],
-      false
-    ),
-    new Point(
-      'drive',
-      'chamonix',
-      new Date('2019-03-18T14:30'),
-      new Date('2019-03-18T16:05'),
-      160,
-      ['rent-car'],
-      true
-    ),
-    new Point(
-      'check-in',
-      'geneva',
-      new Date('2019-03-19T00:00'),
-      new Date('2019-03-20T00:00'),
-      80,
-      ['upgrade-room', 'breakfast'],
-      false
-    ),
-    new Point(
-      'sightseeing',
-      'paris',
-      new Date('2019-03-20T10:00'),
-      new Date('2019-03-20T14:00'),
-      45,
-      ['guide'],
-      true
-    ),
-  ];
-}
-
-export function getAllOffers() {
-  const allOffers = {};
-  Object.values(OFFERS_BY_TYPE).forEach((offersMap) => {
-    Object.assign(allOffers, offersMap);
-  });
-  return allOffers;
-}
-
-export function getOffersByTypeForForm(type) {
-  const offers = getOffersByType(type);
-  return Object.values(offers).map((offer) => ({
-    id: offer.id,
-    title: offer.title,
-    price: offer.price,
-    selected: false,
-  }));
-}
+const MOCK_POINTS = [
+  {
+    id: generateId(),
+    type: 'taxi',
+    destination: 'amsterdam',
+    dateFrom: new Date('2019-03-18T10:30'),
+    dateTo: new Date('2019-03-18T11:00'),
+    price: 20,
+    offers: ['luggage-taxi'],
+    isFavorite: true
+  },
+  {
+    id: generateId(),
+    type: 'flight',
+    destination: 'chamonix',
+    dateFrom: new Date('2019-03-18T12:25'),
+    dateTo: new Date('2019-03-18T13:35'),
+    price: 160,
+    offers: ['luggage', 'comfort'],
+    isFavorite: false
+  },
+  {
+    id: generateId(),
+    destination: 'chamonix',
+    dateFrom: new Date('2019-03-18T14:30'),
+    dateTo: new Date('2019-03-18T16:05'),
+    price: 160,
+    offers: ['rent-car'],
+    isFavorite: true
+  },
+  {
+    id: generateId(),
+    type: 'check-in',
+    destination: 'geneva',
+    dateFrom: new Date('2019-03-19T00:00'),
+    dateTo: new Date('2019-03-20T00:00'),
+    price: 80,
+    offers: ['upgrade-room', 'breakfast'],
+    isFavorite: false
+  },
+];
+export { DESTINATIONS, OFFERS_BY_TYPE, MOCK_POINTS };

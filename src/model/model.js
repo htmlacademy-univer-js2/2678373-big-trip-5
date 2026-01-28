@@ -1,8 +1,8 @@
-import { generateMockPoints, getDestinations, getAllOffers, getOffersByType } from './mock-data.js';
+import { getAllPoints, getDestinations, getAllOffers, getOffersByType } from '../utils/pointsUtils.js';
 
 export default class Model {
   constructor() {
-    this.points = generateMockPoints();
+    this.points = getAllPoints();
     this.destinations = getDestinations();
     this.offers = getAllOffers();
   }

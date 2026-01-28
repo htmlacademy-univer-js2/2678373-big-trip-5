@@ -42,7 +42,6 @@ export default class Presenter {
       this.model.getOffers()
     );
     render(createFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
-
     const editFormComponent = new EditFormView(
       {
         type: 'flight',
@@ -58,7 +57,7 @@ export default class Presenter {
 
     const points = this.model.getPoints();
     points.forEach((point) => {
-      const destination = this.model.getDestinationById(point.destinationId);
+      const destination = this.model.getDestinationById(point.destination);
       const roadPointComponent = new RoadPointView(point, destination, this.model.getOffers());
       render(roadPointComponent, this.eventsListContainer);
     });

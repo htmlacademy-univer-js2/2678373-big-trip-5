@@ -1,5 +1,5 @@
 import FormView from './form-view.js';
-import { getOffersByType } from '../model/mock-data.js';
+import { getOffersByType } from '../utils/pointsUtils.js';
 
 export default class EditFormView extends FormView {
   constructor(point, destination, offers) {
