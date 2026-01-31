@@ -5,15 +5,27 @@ import SortingView from './view/sorting-view.js';
 import EventsListView from './view/events-list-view.js';
 import RoadPointView from './view/road-point-view.js';
 import EditFormView from './view/edit-form-view.js';
-import CreateFormView from './view/create-form-view.js';
 
 export default class Presenter {
+  #tripInfoContainer = null;
+  #filtersContainer = null;
+  #sortingContainer = null;
+  #eventsListContainer = null;
+  #model = null;
+  #activeForm = null;
+  #activeRoadPoint = null;
   constructor(model) {
-    this.tripInfoContainer = document.querySelector('.trip-main');
-    this.filtersContainer = document.querySelector('.trip-controls__filters');
-    this.sortingContainer = document.querySelector('.trip-events');
-    this.eventsListContainer = null;
-    this.model = model;
+    this.#tripInfoContainer = document.querySelector('.trip-main');
+    this.#filtersContainer = document.querySelector('.trip-controls__filters');
+    this.#sortingContainer = document.querySelector('.trip-events');
+    this.#eventsListContainer = null;
+    this.#model = model;
+
+    // Состояние для отслеживания активной формы
+    this.#activeForm = null;
+    this.#activeRoadPoint = null;
+
+    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
   init() {
@@ -23,43 +35,75 @@ export default class Presenter {
       cost: '1230',
     };
     const tripInfoComponent = new TripInfoView(tripInfoData);
-    render(tripInfoComponent, this.tripInfoContainer, RenderPosition.AFTERBEGIN);
+    render(tripInfoComponent, this.#tripInfoContainer, RenderPosition.AFTERBEGIN);
 
     const filtersComponent = new FiltersView();
-    render(filtersComponent, this.filtersContainer);
+    render(filtersComponent, this.#filtersContainer);
 
     const sortingComponent = new SortingView();
-    render(sortingComponent, this.sortingContainer, RenderPosition.AFTERBEGIN);
+    render(sortingComponent, this.#sortingContainer, RenderPosition.AFTERBEGIN);
 
     const eventsListComponent = new EventsListView();
-    render(eventsListComponent, this.sortingContainer);
-    this.eventsListContainer = eventsListComponent.getListElement();
+    render(eventsListComponent, this.#sortingContainer);
+    this.#eventsListContainer = eventsListComponent.element;
 
-    const genevaDest = this.model.getDestinationById('geneva');
-    const createFormComponent = new CreateFormView(
-      { type: 'flight', startTime: '', endTime: '', basePrice: 0 },
-      genevaDest,
-      this.model.getOffers()
-    );
-    render(createFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
-    const editFormComponent = new EditFormView(
-      {
-        type: 'flight',
-        startTime: '19/03/19 00:00',
-        endTime: '19/03/19 00:00',
-        basePrice: 160,
-        selectedOffers: ['luggage', 'comfort'],
-      },
-      genevaDest,
-      this.model.getOffers()
-    );
-    render(editFormComponent, this.eventsListContainer, RenderPosition.AFTERBEGIN);
-
-    const points = this.model.getPoints();
+    const points = this.#model.points;
     points.forEach((point) => {
-      const destination = this.model.getDestinationById(point.destination);
-      const roadPointComponent = new RoadPointView(point, destination, this.model.getOffers());
-      render(roadPointComponent, this.eventsListContainer);
+      const destination = this.#model.getDestinationById(point.destination);
+      const roadPointComponent = new RoadPointView({
+        point: point,
+        destination: destination,
+        offers: this.#model.offers
+      });
+
+      const editFormComponent = new EditFormView({
+        point: point,
+        destination: destination,
+        offers: this.#model.offers,
+        onFormSubmit: (evt) => {
+          evt.preventDefault();
+          this._closeForm(roadPointComponent, editFormComponent);
+        },
+        onRollupClick: () => {
+          this._closeForm(roadPointComponent, editFormComponent);
+        }
+      });
+
+      const openEditForm = () => {
+        this._openForm(roadPointComponent, editFormComponent);
+      };
+
+      roadPointComponent.setRollupClickHandler(openEditForm);
+
+      render(roadPointComponent, this.#eventsListContainer);
     });
   }
+
+  _openForm(roadPointComponent, editFormComponent) {
+    if (this.#activeForm && this.#activeRoadPoint) {
+      this._closeForm(this.#activeRoadPoint, this.#activeForm);
+    }
+    this.#eventsListContainer.replaceChild(editFormComponent.element, roadPointComponent.element);
+    this.#activeForm = editFormComponent;
+    this.#activeRoadPoint = roadPointComponent;
+    document.addEventListener('keydown', this._escKeyDownHandler);
+  }
+
+  _closeForm(roadPointComponent, editFormComponent) {
+    this.#eventsListContainer.replaceChild(roadPointComponent.element, editFormComponent.element);
+
+    this.#activeForm = null;
+    this.#activeRoadPoint = null;
+    document.removeEventListener('keydown', this._escKeyDownHandler);
+  }
+
+  _escKeyDownHandler(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      if (this.#activeForm && this.#activeRoadPoint) {
+        this._closeForm(this.#activeRoadPoint, this.#activeForm);
+      }
+    }
+  }
+
 }

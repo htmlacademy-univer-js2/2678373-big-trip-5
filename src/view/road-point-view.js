@@ -1,19 +1,31 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { getDuration } from '../utils/defineTimeDuration.js';
-export default class RoadPointView {
-  constructor(point, destination, offers) {
-    this.point = point;
-    this.destination = destination;
-    this.offers = offers;
-    this.element = null;
+export default class RoadPointView extends AbstractView {
+  #point = {};
+  #destination = {};
+  #offers = {};
+  #handleRollupClick = null;
+  constructor({
+    point,
+    destination,
+    offers,
+    onRollupClick = {}
+  }) {
+    super();
+    this.#point = point;
+    this.#destination = destination;
+    this.#offers = offers;
+    if (onRollupClick) {
+      this.setRollupClickHandler(onRollupClick);
+    }
   }
 
-  getTemplate() {
-    const { type, dateFrom, dateTo, price, offers, isFavorite } = this.point;
-    const destinationName = this.destination ? this.destination.name : '';
+  get template() {
+    const { type, dateFrom, dateTo, price, offers, isFavorite } = this.#point;
+    const destinationName = this.#destination ? this.#destination.name : '';
 
     const offersTemplate = offers.map((offerId) => {
-      const offer = this.offers[offerId];
+      const offer = this.#offers[offerId];
       if (!offer) {
         return '';
       }
@@ -26,7 +38,7 @@ export default class RoadPointView {
     `;
     }).join('');
 
-    const duration = getDuration(this.point);
+    const duration = getDuration(this.#point);
     const favoriteClass = isFavorite ? 'event__favorite-btn--active' : '';
 
     return `<li class="trip-events__item">
@@ -64,14 +76,10 @@ export default class RoadPointView {
     </li>`;
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
+  setRollupClickHandler(callback) {
+    this.#handleRollupClick = callback;
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#handleRollupClick);
   }
 
-  removeElement() {
-    this.element = null;
-  }
 }

@@ -1,6 +1,7 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class SortingView {
+export default class SortingView extends AbstractView {
+  #sorts = [];
   constructor(sorts = [
     { id: 'day', label: 'Day', checked: true, disabled: false },
     { id: 'event', label: 'Event', checked: false, disabled: true },
@@ -8,8 +9,8 @@ export default class SortingView {
     { id: 'price', label: 'Price', checked: false, disabled: false },
     { id: 'offer', label: 'Offers', checked: false, disabled: true },
   ]) {
-    this.sorts = sorts;
-    this.element = null;
+    super();
+    this.#sorts = sorts;
   }
 
   getSortTemplate(sort) {
@@ -19,21 +20,10 @@ export default class SortingView {
     </div>`;
   }
 
-  getTemplate() {
-    const sortsHTML = this.sorts.map((sort) => this.getSortTemplate(sort)).join('');
+  get template() {
+    const sortsHTML = this.#sorts.map((sort) => this.getSortTemplate(sort)).join('');
     return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
       ${sortsHTML}
     </form>`;
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }

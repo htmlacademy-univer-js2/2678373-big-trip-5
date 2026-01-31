@@ -2,15 +2,34 @@ import FormView from './form-view.js';
 import { getOffersByType } from '../utils/pointsUtils.js';
 
 export default class EditFormView extends FormView {
-  constructor(point, destination, offers) {
-    super(point);
-    this.destination = destination;
-    this.allOffers = offers;
+  #point = {};
+  #destination = {};
+  #allOffers = {};
+  #onFormSubmit = null;
+  #onRollupClick = null;
+
+  constructor({
+    point,
+    destination,
+    offers,
+    onFormSubmit = {},
+    onRollupClick = {}
+  }) {
+    super();
+    this.#destination = destination;
+    this.#allOffers = offers;
+    this.#point = point;
+    if (onRollupClick) {
+      this.setRollupClickHandler(onRollupClick);
+    }
+    if (onFormSubmit) {
+      this.setFormSubmitHandler(onFormSubmit);
+    }
   }
 
-  getTemplate() {
-    const { type, startTime, endTime, basePrice, selectedOffers } = this.point;
-    const destinationData = this.destination || {};
+  get template() {
+    const { type, dateFrom: startTime, dateTo: endTime, price: basePrice, offers: selectedOffers = [] } = this.#point;
+    const destinationData = this.#destination || {};
     const typeOffers = getOffersByType(type) || {};
     const offersForForm = Object.values(typeOffers).map((offer) => ({
       id: offer.id,
@@ -94,6 +113,9 @@ export default class EditFormView extends FormView {
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
           <button class="event__reset-btn" type="button">Delete</button>
+          <button class="event__rollup-btn" type="button">
+            <span class="visually-hidden">Open event</span>
+          </button>
         </header>
         <section class="event__details">
           ${offersSection}
@@ -101,5 +123,16 @@ export default class EditFormView extends FormView {
         </section>
       </form>
     </li>`;
+  }
+
+  setFormSubmitHandler(callback) {
+    this.#onFormSubmit = callback;
+    this.element.querySelector('form').addEventListener('submit', callback);
+  }
+
+  setRollupClickHandler(callback) {
+    this.#onRollupClick = callback;
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#onRollupClick);
   }
 }

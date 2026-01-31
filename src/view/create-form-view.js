@@ -2,15 +2,19 @@ import FormView from './form-view.js';
 import { getOffersByType } from '../utils/pointsUtils.js';
 
 export default class CreateFormView extends FormView {
-  constructor(point, destination, offers) {
-    super(point);
-    this.destination = destination;
-    this.allOffers = offers;
+  #point = {};
+  #destination = {};
+  #allOffers = {};
+  constructor({ point, destination, offers } = {}) {
+    super();
+    this.#destination = destination;
+    this.#allOffers = offers;
+    this.#point = point;
   }
 
-  getTemplate() {
-    const { type = 'flight', startTime = '', endTime = '', basePrice = '' } = this.point;
-    const destinationData = this.destination || {};
+  get template() {
+    const { type = 'flight', startTime = '', endTime = '', basePrice = '' } = this.#point;
+    const destinationData = this.#destination || {};
 
     const typeOffers = getOffersByType(type) || {};
     const offersForForm = Object.values(typeOffers).map((offer) => ({
