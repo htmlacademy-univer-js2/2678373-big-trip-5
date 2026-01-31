@@ -1,26 +1,29 @@
 import { getAllPoints, getDestinations, getAllOffers, getOffersByType } from '../utils/pointsUtils.js';
 
 export default class Model {
+  #points = [];
+  #destinations = {};
+  #offers = {};
   constructor() {
-    this.points = getAllPoints();
-    this.destinations = getDestinations();
-    this.offers = getAllOffers();
+    this.#points = getAllPoints();
+    this.#destinations = getDestinations();
+    this.#offers = getAllOffers();
   }
 
-  getPoints() {
-    return this.points;
+  get points() {
+    return this.#points;
   }
 
-  getDestinations() {
-    return this.destinations;
+  get destinations() {
+    return this.#destinations;
   }
 
-  getOffers() {
-    return this.offers;
+  get offers() {
+    return this.#offers;
   }
 
   getDestinationById(id) {
-    return this.destinations[id];
+    return this.#destinations[id];
   }
 
   getOffersByType(type) {

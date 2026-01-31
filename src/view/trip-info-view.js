@@ -1,15 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { createElement } from '../render.js';
 
 export default class TripInfoView extends AbstractView {
+  #tripData = {};
   constructor(tripData = {}) {
     super();
-    this.tripData = tripData;
-    this.element = null;
+    this.#tripData = tripData;
   }
 
-  getTemplate() {
-    const { title, dates, cost } = this.tripData;
+  get template() {
+    const { title, dates, cost } = this.#tripData;
 
     return `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
@@ -24,14 +23,5 @@ export default class TripInfoView extends AbstractView {
     </section>`;
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
 
-  removeElement() {
-    this.element = null;
-  }
 }

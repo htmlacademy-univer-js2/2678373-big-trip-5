@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { createElement } from '../render.js';
 
 export default class FiltersView extends AbstractView {
+  #filters = [];
   constructor(filters = [
     { id: 'everything', label: 'Everything', checked: true },
     { id: 'future', label: 'Future', checked: false },
@@ -9,8 +9,7 @@ export default class FiltersView extends AbstractView {
     { id: 'past', label: 'Past', checked: false },
   ]) {
     super();
-    this.filters = filters;
-    this.element = null;
+    this.#filters = filters;
   }
 
   getFilterTemplate(filter) {
@@ -20,22 +19,12 @@ export default class FiltersView extends AbstractView {
     </div>`;
   }
 
-  getTemplate() {
-    const filtersHTML = this.filters.map((filter, index) => this.getFilterTemplate(filter, index)).join('');
+  get template() {
+    const filtersHTML = this.#filters.map((filter, index) => this.getFilterTemplate(filter, index)).join('');
     return `<form class="trip-filters" action="#" method="get">
       ${filtersHTML}
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`;
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }

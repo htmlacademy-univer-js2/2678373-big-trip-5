@@ -113,6 +113,7 @@ const MOCK_POINTS = [
   },
   {
     id: generateId(),
+    type: 'train',
     destination: 'chamonix',
     dateFrom: new Date('2019-03-18T14:30'),
     dateTo: new Date('2019-03-18T16:05'),
