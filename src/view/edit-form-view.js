@@ -8,7 +8,13 @@ export default class EditFormView extends FormView {
   #onFormSubmit = null;
   #onRollupClick = null;
 
-  constructor(point, destination, offers, { onFormSubmit } = {}, { onRollupClick } = {}) {
+  constructor({
+    point,
+    destination,
+    offers,
+    onFormSubmit = {},
+    onRollupClick = {}
+  }) {
     super();
     this.#destination = destination;
     this.#allOffers = offers;
@@ -17,7 +23,7 @@ export default class EditFormView extends FormView {
       this.setRollupClickHandler(onRollupClick);
     }
     if (onFormSubmit) {
-      this.setFromSubmitHandler(onFormSubmit);
+      this.setFormSubmitHandler(onFormSubmit);
     }
   }
 
@@ -119,7 +125,7 @@ export default class EditFormView extends FormView {
     </li>`;
   }
 
-  setFromSubmitHandler(callback) {
+  setFormSubmitHandler(callback) {
     this.#onFormSubmit = callback;
     this.element.querySelector('form').addEventListener('submit', callback);
   }

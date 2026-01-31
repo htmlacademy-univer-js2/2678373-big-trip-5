@@ -50,15 +50,20 @@ export default class Presenter {
     const points = this.#model.points;
     points.forEach((point) => {
       const destination = this.#model.getDestinationById(point.destination);
-      const roadPointComponent = new RoadPointView(point, destination, this.#model.offers);
+      const roadPointComponent = new RoadPointView({
+        point: point,
+        destination: destination,
+        offers: this.#model.offers
+      });
 
-      const editFormComponent = new EditFormView(point, destination, this.#model.offers, {
+      const editFormComponent = new EditFormView({
+        point: point,
+        destination: destination,
+        offers: this.#model.offers,
         onFormSubmit: (evt) => {
           evt.preventDefault();
           this._closeForm(roadPointComponent, editFormComponent);
-        }
-      },
-      {
+        },
         onRollupClick: () => {
           this._closeForm(roadPointComponent, editFormComponent);
         }

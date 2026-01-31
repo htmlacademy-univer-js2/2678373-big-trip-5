@@ -5,7 +5,12 @@ export default class RoadPointView extends AbstractView {
   #destination = {};
   #offers = {};
   #handleRollupClick = null;
-  constructor(point, destination, offers, { onRollupClick } = {}) {
+  constructor({
+    point,
+    destination,
+    offers,
+    onRollupClick = {}
+  }) {
     super();
     this.#point = point;
     this.#destination = destination;

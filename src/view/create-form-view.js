@@ -5,7 +5,7 @@ export default class CreateFormView extends FormView {
   #point = {};
   #destination = {};
   #allOffers = {};
-  constructor(point, destination, offers) {
+  constructor({ point, destination, offers } = {}) {
     super();
     this.#destination = destination;
     this.#allOffers = offers;
