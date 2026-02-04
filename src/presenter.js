@@ -21,7 +21,6 @@ export default class Presenter {
     this.#eventsListContainer = null;
     this.#model = model;
 
-    // Состояние для отслеживания активной формы
     this.#activeForm = null;
     this.#activeRoadPoint = null;
 
