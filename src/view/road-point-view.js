@@ -5,11 +5,13 @@ export default class RoadPointView extends AbstractView {
   #destination = {};
   #offers = {};
   #handleRollupClick = null;
+  #handleFavoriteClick = null;
   constructor({
     point,
     destination,
     offers,
-    onRollupClick = {}
+    onRollupClick = {},
+    onFavouriteClick = {}
   }) {
     super();
     this.#point = point;
@@ -17,6 +19,9 @@ export default class RoadPointView extends AbstractView {
     this.#offers = offers;
     if (onRollupClick) {
       this.setRollupClickHandler(onRollupClick);
+    }
+    if (onFavouriteClick) {
+      this.setFavoriteClickHandler(onFavouriteClick);
     }
   }
 
@@ -82,4 +87,9 @@ export default class RoadPointView extends AbstractView {
       .addEventListener('click', this.#handleRollupClick);
   }
 
+  setFavoriteClickHandler(callback) {
+    this.#handleFavoriteClick = callback;
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#handleFavoriteClick);
+  }
 }

@@ -10,6 +10,10 @@ export default class Model {
     this.#offers = getAllOffers();
   }
 
+  set points(points) {
+    this.#points = points;
+  }
+
   get points() {
     return this.#points;
   }
