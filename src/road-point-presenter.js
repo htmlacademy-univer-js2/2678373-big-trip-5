@@ -8,19 +8,20 @@ export default class RoadPointPresenter {
   #offers = null;
   #destination = null;
   resetForm = null;
-  onFavouriteChange = null;
 
   #roadPointComponent = null;
   #editFormComponent = null;
   #activeForm = null;
 
-  constructor({ eventsListContainer, point, destination, offers, resetForm, onFavouriteChange }) {
+  #updatePointInModel = null;
+
+  constructor({ eventsListContainer, point, destination, offers, resetForm, updatePoint }) {
     this.#eventsListContainer = eventsListContainer;
     this.#point = point;
     this.#destination = destination;
     this.#offers = offers;
     this.resetForm = resetForm;
-    this.onFavouriteChange = onFavouriteChange;
+    this.#updatePointInModel = updatePoint;
 
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
@@ -108,7 +109,13 @@ export default class RoadPointPresenter {
   }
 
   _handleFavouriteClick = () => {
-    const updatedPoint = { ...this.#point, isFavorite: !this.#point.isFavorite };
-    this.onFavouriteChange(updatedPoint);
+    const updatedPoint = {
+      ...this.#point,
+      isFavorite: !this.#point.isFavorite
+    };
+
+    this.#updatePointInModel(updatedPoint);
+
+    this.updatePoint(updatedPoint);
   };
 }

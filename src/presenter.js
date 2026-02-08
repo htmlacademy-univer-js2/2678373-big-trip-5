@@ -28,18 +28,6 @@ export default class RoadPresenter {
     });
   }
 
-  #handleFavouriteChange = (updatedPoint) => {
-    this.#model.points = this.#model.points.map((point) =>
-      point.id === updatedPoint.id ? updatedPoint : point
-    );
-
-    const presenter = this.#roadPointPresenters.find(
-      (p) => p.getPointId() === updatedPoint.id
-    );
-
-    presenter.updatePoint(updatedPoint);
-  };
-
   init() {
     const tripInfoData = {
       title: 'Amsterdam &mdash; Chamonix &mdash; Geneva',
@@ -68,7 +56,11 @@ export default class RoadPresenter {
         destination: this.#model.getDestinationById(point.destination),
         offers: this.#model.offers,
         resetForm: this.resetAllForms.bind(this),
-        onFavouriteChange: this.#handleFavouriteChange
+        updatePoint: (updatedPoint) => {
+          this.#model.points = this.#model.points.map((p) =>
+            p.id === updatedPoint.id ? updatedPoint : p
+          );
+        }
       });
       roadPointPresenter.init();
       this.#roadPointPresenters.push(roadPointPresenter);
