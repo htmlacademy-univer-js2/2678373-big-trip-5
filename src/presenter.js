@@ -3,28 +3,29 @@ import TripInfoView from './view/trip-info-view.js';
 import FiltersView from './view/filters-view.js';
 import SortingView from './view/sorting-view.js';
 import EventsListView from './view/events-list-view.js';
-import RoadPointView from './view/road-point-view.js';
-import EditFormView from './view/edit-form-view.js';
+// import RoadPointView from './view/road-point-view.js';
+// import EditFormView from './view/edit-form-view.js';
+import RoadPointPresenter from './road-point-presenter.js';
 
-export default class Presenter {
+export default class RoadPresenter {
   #tripInfoContainer = null;
   #filtersContainer = null;
   #sortingContainer = null;
   #eventsListContainer = null;
   #model = null;
-  #activeForm = null;
-  #activeRoadPoint = null;
+  #roadPointPresenters = [];
   constructor(model) {
     this.#tripInfoContainer = document.querySelector('.trip-main');
     this.#filtersContainer = document.querySelector('.trip-controls__filters');
     this.#sortingContainer = document.querySelector('.trip-events');
     this.#eventsListContainer = null;
     this.#model = model;
+  }
 
-    this.#activeForm = null;
-    this.#activeRoadPoint = null;
-
-    this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+  resetAllForms() {
+    this.#roadPointPresenters.forEach((presenter) => {
+      presenter.resetView();
+    });
   }
 
   init() {
@@ -46,63 +47,24 @@ export default class Presenter {
     render(eventsListComponent, this.#sortingContainer);
     this.#eventsListContainer = eventsListComponent.element;
 
+
     const points = this.#model.points;
     points.forEach((point) => {
-      const destination = this.#model.getDestinationById(point.destination);
-      const roadPointComponent = new RoadPointView({
+      const roadPointPresenter = new RoadPointPresenter({
+        eventsListContainer: this.#eventsListContainer,
         point: point,
-        destination: destination,
-        offers: this.#model.offers
-      });
-
-      const editFormComponent = new EditFormView({
-        point: point,
-        destination: destination,
+        destination: this.#model.getDestinationById(point.destination),
         offers: this.#model.offers,
-        onFormSubmit: (evt) => {
-          evt.preventDefault();
-          this._closeForm(roadPointComponent, editFormComponent);
-        },
-        onRollupClick: () => {
-          this._closeForm(roadPointComponent, editFormComponent);
+        resetForm: this.resetAllForms.bind(this),
+        updatePoint: (updatedPoint) => {
+          this.#model.points = this.#model.points.map((p) =>
+            p.id === updatedPoint.id ? updatedPoint : p
+          );
         }
       });
-
-      const openEditForm = () => {
-        this._openForm(roadPointComponent, editFormComponent);
-      };
-
-      roadPointComponent.setRollupClickHandler(openEditForm);
-
-      render(roadPointComponent, this.#eventsListContainer);
+      roadPointPresenter.init();
+      this.#roadPointPresenters.push(roadPointPresenter);
     });
-  }
-
-  _openForm(roadPointComponent, editFormComponent) {
-    if (this.#activeForm && this.#activeRoadPoint) {
-      this._closeForm(this.#activeRoadPoint, this.#activeForm);
-    }
-    this.#eventsListContainer.replaceChild(editFormComponent.element, roadPointComponent.element);
-    this.#activeForm = editFormComponent;
-    this.#activeRoadPoint = roadPointComponent;
-    document.addEventListener('keydown', this._escKeyDownHandler);
-  }
-
-  _closeForm(roadPointComponent, editFormComponent) {
-    this.#eventsListContainer.replaceChild(roadPointComponent.element, editFormComponent.element);
-
-    this.#activeForm = null;
-    this.#activeRoadPoint = null;
-    document.removeEventListener('keydown', this._escKeyDownHandler);
-  }
-
-  _escKeyDownHandler(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      if (this.#activeForm && this.#activeRoadPoint) {
-        this._closeForm(this.#activeRoadPoint, this.#activeForm);
-      }
-    }
   }
 
 }
