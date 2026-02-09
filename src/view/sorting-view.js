@@ -4,7 +4,7 @@ export default class SortingView extends AbstractView {
   #sorts = [];
   #onSortingChange = null;
   constructor({ sorts = [
-    { id: 'day', label: 'Day', checked: false, disabled: false },
+    { id: 'day', label: 'Day', checked: true, disabled: false },
     { id: 'event', label: 'Event', checked: false, disabled: true },
     { id: 'time', label: 'Time', checked: false, disabled: false },
     { id: 'price', label: 'Price', checked: false, disabled: false },

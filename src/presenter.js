@@ -1,4 +1,6 @@
 import { render, RenderPosition } from './render.js';
+import dayjs from 'dayjs';
+
 import TripInfoView from './view/trip-info-view.js';
 import FiltersView from './view/filters-view.js';
 import SortingView from './view/sorting-view.js';
@@ -17,7 +19,7 @@ export default class RoadPresenter {
   #roadPointPresenters = [];
 
   #currentFilter = 'everything';
-  #currentSorting = 'time';
+  #currentSorting = 'day';
 
   constructor(model) {
     this.#tripInfoContainer = document.querySelector('.trip-main');
@@ -38,13 +40,20 @@ export default class RoadPresenter {
 
     switch (this.#currentSorting) {
       case 'time':
-        points = points.slice().sort((a, b) => (a.dateTo - a.dateFrom) - (b.dateTo - b.dateFrom));
+        points = points.slice().sort((a, b) =>
+          dayjs(a.dateTo).diff(dayjs(a.dateFrom)) -
+          dayjs(b.dateTo).diff(dayjs(b.dateFrom))
+        );
         break;
+
       case 'price':
         points = points.slice().sort((a, b) => b.price - a.price);
         break;
+
       case 'day':
-        points = points.slice().sort((a, b) => a.dateFrom - b.dateFrom);
+        points = points.slice().sort((a, b) =>
+          dayjs(a.dateFrom).diff(dayjs(b.dateFrom))
+        );
         break;
     }
 
@@ -52,17 +61,25 @@ export default class RoadPresenter {
   }
 
   #getFilteredPoints() {
+    const now = dayjs();
+
     switch (this.#currentFilter) {
       case 'future':
-        return this.#model.points.filter((point) => point.dateFrom > new Date());
-      case 'past':
-        return this.#model.points.filter((point) => point.dateTo < new Date());
-      case 'present':
-        return this.#model.points.filter(
-          (point) =>
-            point.dateFrom <= new Date() &&
-            point.dateTo >= new Date()
+        return this.#model.points.filter((point) =>
+          dayjs(point.dateFrom).isAfter(now)
         );
+
+      case 'past':
+        return this.#model.points.filter((point) =>
+          dayjs(point.dateTo).isBefore(now)
+        );
+
+      case 'present':
+        return this.#model.points.filter((point) =>
+          dayjs(point.dateFrom).isSameOrBefore(now) &&
+          dayjs(point.dateTo).isSameOrAfter(now)
+        );
+
       default:
         return this.#model.points;
     }
