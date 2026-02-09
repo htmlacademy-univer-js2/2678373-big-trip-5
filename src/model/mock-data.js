@@ -131,5 +131,25 @@ const MOCK_POINTS = [
     offers: ['upgrade-room', 'breakfast'],
     isFavorite: false
   },
+  {
+    id: generateId(),
+    type: 'check-in',
+    destination: 'paris',
+    dateFrom: new Date('2026-03-19T00:00'),
+    dateTo: new Date('2026-03-20T00:00'),
+    price: 80,
+    offers: ['upgrade-room', 'breakfast'],
+    isFavorite: false
+  },
+  {
+    id: generateId(),
+    type: 'check-in',
+    destination: 'paris',
+    dateFrom: new Date('2026-02-09T00:00'),
+    dateTo: new Date('2026-02-20T00:00'),
+    price: 80,
+    offers: ['upgrade-room', 'breakfast'],
+    isFavorite: false
+  },
 ];
 export { DESTINATIONS, OFFERS_BY_TYPE, MOCK_POINTS };
