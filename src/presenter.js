@@ -1,6 +1,9 @@
 import { render, RenderPosition } from './render.js';
 import dayjs from 'dayjs';
-
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+dayjs.extend(isSameOrBefore);
+dayjs.extend(isSameOrAfter);
 import TripInfoView from './view/trip-info-view.js';
 import FiltersView from './view/filters-view.js';
 import SortingView from './view/sorting-view.js';
