@@ -39,28 +39,27 @@ export default class RoadPresenter {
   }
 
   #getProcessedPoints() {
-    let points = this.#getFilteredPoints();
+    const points = this.#getFilteredPoints();
 
     switch (this.#currentSorting) {
       case 'time':
-        points = points.slice().sort((a, b) =>
-          dayjs(a.dateTo).diff(dayjs(a.dateFrom)) -
-          dayjs(b.dateTo).diff(dayjs(b.dateFrom))
+        return points.sort((a, b) =>
+          (dayjs(b.dateTo).diff(dayjs(b.dateFrom))) -
+          (dayjs(a.dateTo).diff(dayjs(a.dateFrom)))
         );
-        break;
+
 
       case 'price':
-        points = points.slice().sort((a, b) => b.price - a.price);
-        break;
+        return points.sort((a, b) => b.price - a.price);
 
       case 'day':
-        points = points.slice().sort((a, b) =>
-          dayjs(a.dateFrom).diff(dayjs(b.dateFrom))
+        return points.sort((a, b) =>
+          dayjs(b.dateFrom).diff(dayjs(a.dateFrom))
         );
-        break;
-    }
 
-    return points;
+      default:
+        return points;
+    }
   }
 
   #getFilteredPoints() {
@@ -120,6 +119,16 @@ export default class RoadPresenter {
     });
   }
 
+  #rerenderSorting() {
+    const sortingComponent = new SortingView({onSortingChange: (sortingType) => {
+      if (this.#currentSorting !== sortingType) {
+        this.#currentSorting = sortingType;
+        this.#rerenderPoints();
+      }
+    }});
+    this.#sortingContainer.firstElementChild.replaceWith(sortingComponent.element);
+  }
+
   init() {
     const tripInfoData = {
       title: 'Amsterdam &mdash; Chamonix &mdash; Geneva',
@@ -133,7 +142,9 @@ export default class RoadPresenter {
 
       if (this.#currentFilter !== filterType) {
         this.#currentFilter = filterType;
+        this.#currentSorting = 'day';
         this.#rerenderPoints();
+        this.#rerenderSorting();
       }
     }});
     render(filtersComponent, this.#filtersContainer);
