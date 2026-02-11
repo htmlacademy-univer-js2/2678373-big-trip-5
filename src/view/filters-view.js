@@ -2,19 +2,32 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 export default class FiltersView extends AbstractView {
   #filters = [];
-  constructor(filters = [
+  #onFilterChange = null;
+  constructor({filters = [
     { id: 'everything', label: 'Everything', checked: true },
     { id: 'future', label: 'Future', checked: false },
     { id: 'present', label: 'Present', checked: false },
     { id: 'past', label: 'Past', checked: false },
-  ]) {
+  ],
+  onFilterChange
+  }) {
     super();
     this.#filters = filters;
+    this.#onFilterChange = onFilterChange;
+    this.element.addEventListener('change', this.#filterChangeHandler);
   }
 
   getFilterTemplate(filter) {
     return `<div class="trip-filters__filter">
-      <input id="filter-${filter.id}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${filter.id}"${filter.checked ? ' checked' : ''}>
+      <input
+        id="filter-${filter.id}"
+        class="trip-filters__filter-input visually-hidden"
+        type="radio"
+        name="trip-filter"
+        value="${filter.id}"
+        data-filter-type="${filter.id}"
+        ${filter.checked ? 'checked' : ''}
+      >
       <label class="trip-filters__filter-label" for="filter-${filter.id}">${filter.label}</label>
     </div>`;
   }
@@ -27,4 +40,12 @@ export default class FiltersView extends AbstractView {
     </form>`;
   }
 
+  #filterChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'INPUT') {
+      return;
+    }
+
+    const filterType = evt.target.dataset.filterType;
+    this.#onFilterChange(filterType);
+  };
 }

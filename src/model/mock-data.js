@@ -95,8 +95,8 @@ const MOCK_POINTS = [
     id: generateId(),
     type: 'taxi',
     destination: 'amsterdam',
-    dateFrom: new Date('2019-03-18T10:30'),
-    dateTo: new Date('2019-03-18T11:00'),
+    dateFrom: new Date('2026-04-18T10:30'),
+    dateTo: new Date('2026-04-18T11:00'),
     price: 20,
     offers: ['luggage-taxi'],
     isFavorite: true
@@ -105,8 +105,8 @@ const MOCK_POINTS = [
     id: generateId(),
     type: 'flight',
     destination: 'chamonix',
-    dateFrom: new Date('2019-03-18T12:25'),
-    dateTo: new Date('2019-03-18T13:35'),
+    dateFrom: new Date('2026-03-18T12:25'),
+    dateTo: new Date('2026-03-18T13:35'),
     price: 160,
     offers: ['luggage', 'comfort'],
     isFavorite: false
@@ -115,8 +115,8 @@ const MOCK_POINTS = [
     id: generateId(),
     type: 'train',
     destination: 'chamonix',
-    dateFrom: new Date('2019-03-18T14:30'),
-    dateTo: new Date('2019-03-18T16:05'),
+    dateFrom: new Date('2026-03-18T14:30'),
+    dateTo: new Date('2026-03-18T16:05'),
     price: 160,
     offers: ['rent-car'],
     isFavorite: true
@@ -125,8 +125,28 @@ const MOCK_POINTS = [
     id: generateId(),
     type: 'check-in',
     destination: 'geneva',
-    dateFrom: new Date('2019-03-19T00:00'),
-    dateTo: new Date('2019-03-20T00:00'),
+    dateFrom: new Date('2026-03-19T00:00'),
+    dateTo: new Date('2026-03-20T00:00'),
+    price: 80,
+    offers: ['upgrade-room', 'breakfast'],
+    isFavorite: false
+  },
+  {
+    id: generateId(),
+    type: 'check-in',
+    destination: 'paris',
+    dateFrom: new Date('2026-02-19T00:00'),
+    dateTo: new Date('2026-02-20T00:00'),
+    price: 80,
+    offers: ['upgrade-room', 'breakfast'],
+    isFavorite: false
+  },
+  {
+    id: generateId(),
+    type: 'check-in',
+    destination: 'paris',
+    dateFrom: new Date('2026-02-09T00:00'),
+    dateTo: new Date('2026-02-20T00:00'),
     price: 80,
     offers: ['upgrade-room', 'breakfast'],
     isFavorite: false
